@@ -1,0 +1,12 @@
+{
+  "name": "Albert",
+  "age": 20,
+  "skills": [
+    "JS",
+    "Node.js",
+    "React",
+    "TypeScript",
+    "TypeScript"
+  ],
+  "isStudent": true
+}
