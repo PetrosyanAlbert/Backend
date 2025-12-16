@@ -3,6 +3,7 @@ const { readJSON, writeJSON } = require('../utils/jsonStorage');
 const sendResponse = require('../utils/sendResponse');
 const bodyParser = require('../utils/bodyParser');
 const parseUrl = require('../utils/parseUrl');
+const STATUS = require('../utils/httpStatus');
 
 const dataPath = path.join(__dirname, '../../data/products.json');
 module.exports = async function productsRoutes(req, res) {
@@ -10,25 +11,25 @@ module.exports = async function productsRoutes(req, res) {
     if (resource !== 'products') return;
     if (req.method === 'GET' && !id) {
         const products = readJSON(dataPath);
-        return sendResponse(res, 200, products);
+        return sendResponse(res, STATUS.OK, products);
     }
     if (req.method === 'GET' && id) {
         const products = readJSON(dataPath);
         const product = products.find(p => p.id === id);
         if (!product) {
-            return sendResponse(res, 404, { message: 'Product not found' });
+            return sendResponse(res, STATUS.NOT_FOUND, { message: 'Product not found' });
         }
-        return sendResponse(res, 200, product);
+        return sendResponse(res, STATUS.OK, product);
     }
     if (req.method === 'POST' && !id) {
         try {
             const body = await bodyParser(req);
             if (!body) {
-                return sendResponse(res, 400, { message: 'Request body is required' });
+                return sendResponse(res, STATUS.BAD_REQUEST, { message: 'Request body is required' });
             }
             const { title, price, inStock } = body;
             if (!title || typeof price !== 'number' || typeof inStock !== 'boolean') {
-                return sendResponse(res, 400, {
+                return sendResponse(res, STATUS.BAD_REQUEST, {
                     message: 'title, numeric price and boolean inStock are required'
                 });
             }
@@ -47,9 +48,9 @@ module.exports = async function productsRoutes(req, res) {
             };
             products.push(newProduct);
             writeJSON(dataPath, products);
-            return sendResponse(res, 201, newProduct);
+            return sendResponse(res, STATUS.CREATED, newProduct);
         } catch (err) {
-            return sendResponse(res, 400, {
+            return sendResponse(res, STATUS.BAD_REQUEST, {
                 message: err.message || 'Invalid JSON'
             });
         }
@@ -59,18 +60,18 @@ module.exports = async function productsRoutes(req, res) {
         try {
             const body = await bodyParser(req);
             if (!body) {
-                return sendResponse(res, 400, { message: 'Request body is required' });
+                return sendResponse(res, STATUS.BAD_REQUEST, { message: 'Request body is required' });
             }
             const { title, price, inStock } = body;
             if (!title || typeof price !== 'number' || typeof inStock !== 'boolean') {
-                return sendResponse(res, 400, {
+                return sendResponse(res, STATUS.BAD_REQUEST, {
                     message: 'PUT requires title, price and inStock'
                 });
             }
             const products = readJSON(dataPath);
             const index = products.findIndex(p => p.id === id);
             if (index === -1) {
-                return sendResponse(res, 404, { message: 'Product not found' });
+                return sendResponse(res, STATUS.NOT_FOUND, { message: 'Product not found' });
             }
             const updatedProduct = {
                 ...products[index],
@@ -81,9 +82,9 @@ module.exports = async function productsRoutes(req, res) {
             };
             products[index] = updatedProduct;
             writeJSON(dataPath, products);
-            return sendResponse(res, 200, updatedProduct);
+            return sendResponse(res, STATUS.OK, updatedProduct);
         } catch (err) {
-            return sendResponse(res, 400, {
+            return sendResponse(res, STATUS.BAD_REQUEST, {
                 message: err.message || 'Invalid JSON'
             });
         }
@@ -93,33 +94,33 @@ module.exports = async function productsRoutes(req, res) {
         try {
             const body = await bodyParser(req);
             if (!body) {
-                return sendResponse(res, 400, { message: 'Request body is required' });
+                return sendResponse(res, STATUS.BAD_REQUEST, { message: 'Request body is required' });
             }
             const products = readJSON(dataPath);
             const product = products.find(p => p.id === id);
             if (!product) {
-                return sendResponse(res, 404, { message: 'Product not found' });
+                return sendResponse(res, STATUS.NOT_FOUND, { message: 'Product not found' });
             }
             const { title, price, inStock } = body;
             if (title !== undefined) product.title = title;
             if (price !== undefined) {
                 if (typeof price !== 'number') {
-                    return sendResponse(res, 400, { message: 'price must be a number' });
+                    return sendResponse(res, STATUS.BAD_REQUEST, { message: 'price must be a number' });
                 }
                 product.price = price;
             }
             if (inStock !== undefined) {
                 if (typeof inStock !== 'boolean') {
-                    return sendResponse(res, 400, { message: 'inStock must be boolean' });
+                    return sendResponse(res, STATUS.BAD_REQUEST, { message: 'inStock must be boolean' });
                 }
                 product.inStock = inStock;
             }
             product.updatedAt = new Date().toISOString();
             writeJSON(dataPath, products);
-            return sendResponse(res, 200, product);
+            return sendResponse(res, STATUS.OK, product);
 
         } catch (err) {
-            return sendResponse(res, 400, {
+            return sendResponse(res, STATUS.BAD_REQUEST, {
                 message: err.message || 'Invalid JSON'
             });
         }
@@ -129,11 +130,11 @@ module.exports = async function productsRoutes(req, res) {
         const products = readJSON(dataPath);
         const index = products.findIndex(p => p.id === id);
         if (index === -1) {
-            return sendResponse(res, 404, { message: 'Product not found' });
+            return sendResponse(res, STATUS.NOT_FOUND, { message: 'Product not found' });
         }
         products.splice(index, 1);
         writeJSON(dataPath, products);
-        return sendResponse(res, 204);
+        return sendResponse(res, STATUS.NO_CONTENT);
     }
-    return sendResponse(res, 405, { message: 'Method Not Allowed' });
+    return sendResponse(res, STATUS.METHOD_NOT_ALLOWED, { message: 'Method Not Allowed' });
 };

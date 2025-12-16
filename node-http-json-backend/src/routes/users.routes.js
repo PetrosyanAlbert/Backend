@@ -3,6 +3,7 @@ const { readJSON, writeJSON } = require('../utils/jsonStorage');
 const sendResponse = require('../utils/sendResponse');
 const bodyParser = require('../utils/bodyParser');
 const parseUrl = require('../utils/parseUrl');
+const STATUS = require('../utils/httpStatus');
 
 const dataPath = path.join(__dirname, '../../data/users.json');
 module.exports = async function usersRoutes(req, res) {
@@ -11,7 +12,7 @@ module.exports = async function usersRoutes(req, res) {
 
     if (req.method === 'GET' && !id) {
         const users = readJSON(dataPath);
-        return sendResponse(res, 200, users);
+        return sendResponse(res, STATUS.OK, users);
     }
 
     if (req.method === 'GET' && id) {
@@ -19,24 +20,24 @@ module.exports = async function usersRoutes(req, res) {
         const user = users.find(u => u.id === id);
 
         if (!user) {
-            return sendResponse(res, 404, {message: 'User not found'});
+            return sendResponse(res, STATUS.NOT_FOUND, {message: 'User not found'});
         }
-        return sendResponse(res, 200, user);
+        return sendResponse(res, STATUS.OK, user);
     }
 
     if (req.method === 'POST' && !id) {
         try {
             const body = await bodyParser(req);
             if (!body) {
-                return sendResponse(res, 400, {message: 'Request body is required'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Request body is required'});
             }
             const {name, email, role} = body;
             if (!name || !email) {
-                return sendResponse(res, 400, {message: 'Name and Email are required'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Name and Email are required'});
             }
             const users = readJSON(dataPath);
             if (users.some(u => u.email === email)) {
-                return sendResponse(res, 400, {message: 'Email must be unique'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Email must be unique'});
             }
             const now = new Date().toISOString();
             const lastId = users.length
@@ -53,9 +54,9 @@ module.exports = async function usersRoutes(req, res) {
             }
             users.push(newUser);
             writeJSON(dataPath, users);
-            return sendResponse(res, 201, newUser);
+            return sendResponse(res, STATUS.CREATED, newUser);
         } catch (err) {
-            return sendResponse(res, 400, {message: err.message || 'Invalid JSON'});
+            return sendResponse(res, STATUS.BAD_REQUEST, {message: err.message || 'Invalid JSON'});
         }
     }
 
@@ -63,21 +64,21 @@ module.exports = async function usersRoutes(req, res) {
         try {
             const body = await bodyParser(req);
             if (!body) {
-                return sendResponse(res, 400, {message: 'Request body id required'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Request body id required'});
             }
             const {name, email, role} = body;
             if (!name || !email || !role) {
-                return sendResponse(res, 400, {message: 'PUT requires name, email and role'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'PUT requires name, email and role'});
             }
             const users = readJSON(dataPath);
             const index = users.findIndex(u => u.id === id);
 
             if (index === -1) {
-                return sendResponse(res, 404, {message: 'User not found'});
+                return sendResponse(res, STATUS.NOT_FOUND, {message: 'User not found'});
             }
             const emailT = users.some(u => u.email === email && u.id !== id);
             if (emailT) {
-                return sendResponse(res, 400, {message: 'Email must be unique'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Email must be unique'});
             }
             const putUser = users[index];
             const updateUser = {
@@ -89,9 +90,9 @@ module.exports = async function usersRoutes(req, res) {
             };
             users[index] = updateUser;
             writeJSON(dataPath, users);
-            return sendResponse(res, 200, updateUser);
+            return sendResponse(res, STATUS.OK, updateUser);
         } catch (err) {
-            return sendResponse(res, 400, {message: err.message || 'Invalid JSON'});
+            return sendResponse(res, STATUS.BAD_REQUEST, {message: err.message || 'Invalid JSON'});
         }
     }
 
@@ -99,18 +100,18 @@ module.exports = async function usersRoutes(req, res) {
         try {
             const body = await bodyParser(req);
             if (!body) {
-                return sendResponse(res, 400, {message: 'Request body is required'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Request body is required'});
             }
             const users = readJSON(dataPath);
             const user = users.find(u => u.id === id);
             if (!user) {
-                return sendResponse(res, 404, {message: 'User not found'});
+                return sendResponse(res, STATUS.NOT_FOUND, {message: 'User not found'});
             }
             const {name, email, role} = body;
             if (email) {
                 const emailT = users.some(u => u.email === email && u.id !== id);
                 if (emailT) {
-                    return sendResponse(res, 400, {message: 'Email must be unique'});
+                    return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Email must be unique'});
                 }
             }
             if (name !== undefined) user.name = name;
@@ -118,9 +119,9 @@ module.exports = async function usersRoutes(req, res) {
             if (role !== undefined) user.role = role;
             user.updatedAt = new Date().toISOString();
             writeJSON(dataPath, users);
-            return sendResponse(res, 200, user);
+            return sendResponse(res, STATUS.OK, user);
         } catch (err) {
-            return sendResponse(res, 400, {message: err.message || 'Invalid JSON'});
+            return sendResponse(res, STATUS.BAD_REQUEST, {message: err.message || 'Invalid JSON'});
         }
     }
     
@@ -128,11 +129,11 @@ module.exports = async function usersRoutes(req, res) {
         const users = readJSON(dataPath);
         const index = users.findIndex(u => u.id === id);
         if (index === -1) {
-            return sendResponse(res, 400, {message: 'User not found'});
+            return sendResponse(res, STATUS.NOT_FOUND, {message: 'User not found'});
         }
         users.splice(index, 1);
         writeJSON(dataPath, users);
-        return sendResponse(res, 204);
+        return sendResponse(res, STATUS.NO_CONTENT);
     }
-    return sendResponse(res, 405, { message: 'Method Not Allowed' });
+    return sendResponse(res, STATUS.METHOD_NOT_ALLOWED, { message: 'Method Not Allowed' });
 }

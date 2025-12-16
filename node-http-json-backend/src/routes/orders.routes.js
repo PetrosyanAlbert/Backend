@@ -3,7 +3,7 @@ const { readJSON, writeJSON} = require('../utils/jsonStorage');
 const sendResponse = require('../utils/sendResponse');
 const bodyParser = require('../utils/bodyParser');
 const parseUrl = require('../utils/parseUrl');
-
+const STATUS = require('../utils/httpStatus');
 const dataPath = path.join(__dirname, '../../data/orders.json');
 const STATUSES = ['pending', 'completed', 'cancelled'];
 
@@ -14,33 +14,33 @@ module.exports = async function orderRoutes(req, res) {
 
     if (req.method === 'GET' && !id) {
         const orders = readJSON(dataPath);
-        return sendResponse(res, 200, orders);
+        return sendResponse(res, STATUS.OK, orders);
     }
 
     if(req.method === 'GET' && id) {
         const orders = readJSON(dataPath);
         const order = orders.find(o => o.id === id);
         if (!order) {
-            return sendResponse(res, 404, {message: 'Order not found'});
+            return sendResponse(res, STATUS.NOT_FOUND, {message: 'Order not found'});
         }
-        return sendResponse(res, 200, order);
+        return sendResponse(res, STATUS.OK, order);
     }
 
     if (req.method === 'POST' && !id) {
         try {
             const body = await bodyParser(req);
             if (!body) {
-                return sendResponse(res, 400, {message: 'Request body is required'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Request body is required'});
             }
             const { title, amount, status} = body;
             if (!title || typeof amount !== 'number') {
-                return sendResponse(res, 400, {message: 'Title and numeric amount are required'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Title and numeric amount are required'});
             }
             if (amount <= 0) {
-                return sendResponse(res, 400, {message: 'Amount must be greater than 0'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Amount must be greater than 0'});
             }
             if (status && !STATUSES.includes(status)) {
-                return sendResponse(res, 400, {message: 'Invalid order status'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Invalid order status'});
             }
             const orders = readJSON(dataPath);
             const lastId = orders.length
@@ -58,9 +58,9 @@ module.exports = async function orderRoutes(req, res) {
             }
             orders.push(newOrder);
             writeJSON(dataPath, orders);
-            return sendResponse(res, 201, newOrder);
+            return sendResponse(res, STATUS.CREATED, newOrder);
         } catch (err) {
-            return sendResponse(res, 400, {message: err.message || 'Invalid JSON'});
+            return sendResponse(res, STATUS.BAD_REQUEST, {message: err.message || 'Invalid JSON'});
         }
     }
 
@@ -68,22 +68,22 @@ module.exports = async function orderRoutes(req, res) {
         try {
             const body = await bodyParser(req);
             if (!body) {
-                return sendResponse(res, 400, {message: 'Request body is required'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Request body is required'});
             }
             const { title, amount, status } = body;
             if (!title || typeof amount !== 'number' || !status) {
-                return sendResponse(res, 400, {message: 'PUT requires title, amount and status'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'PUT requires title, amount and status'});
             }  
             if (amount <= 0) {
-                return sendResponse(res, 400, {message: 'Amount must be greater than 0'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Amount must be greater than 0'});
             }
             if (!STATUSES.includes(status)) {
-                return sendResponse(res, 400, {message: 'Invalid order status'});
+                return sendResponse(res, STATUS.BAD_REQUEST, {message: 'Invalid order status'});
             }
             const orders = readJSON(dataPath);
             const index = orders.findIndex(o => o.id === id);
             if (index === -1) {
-                return sendResponse(res, 404, {message: 'Order not found'});
+                return sendResponse(res, STATUS.NOT_FOUND, {message: 'Order not found'});
             }
             const updatedOrder = {
                 ...orders[index],
@@ -94,9 +94,9 @@ module.exports = async function orderRoutes(req, res) {
             };
             orders[index] = updatedOrder;
             writeJSON(dataPath, orders);
-            return sendResponse(res, 200, updatedOrder);
+            return sendResponse(res, STATUS.OK, updatedOrder);
         } catch (err) {
-            return sendResponse(res, 400, { message: err.message || 'Invalid JSON'});
+            return sendResponse(res, STATUS.BAD_REQUEST, { message: err.message || 'Invalid JSON'});
         }
     } 
     
@@ -104,25 +104,24 @@ module.exports = async function orderRoutes(req, res) {
         try {
             const body = await bodyParser(req);
             if (!body) {
-                return sendResponse(res, 400, { message: 'Request body is required' });
+                return sendResponse(res, STATUS.BAD_REQUEST, { message: 'Request body is required' });
             }
             const orders = readJSON(dataPath);
             const order = orders.find(o => o.id === id);
             if (!order) {
-                return sendResponse(res, 404, {message: 'Order not found'});
+                return sendResponse(res, STATUS.NOT_FOUND, {message: 'Order not found'});
             }
             const { title, amount, status } = body;
             if (amount !== undefined) {
                 if (typeof amount !== 'number' || amount <= 0) {
-                    return sendResponse(res, 400, {
-                        message: 'amount must be a number greater than 0'
-                    });
+                    return sendResponse(res, STATUS.BAD_REQUEST, 
+                        {message: 'amount must be a number greater than 0'});
                 }
                 order.amount = amount;
             }
             if (status !== undefined) {
                 if (!STATUSES.includes(status)) {
-                    return sendResponse(res, 400, {
+                    return sendResponse(res, STATUS.BAD_REQUEST, {
                         message: 'Invalid order status'
                     });
                 }
@@ -133,9 +132,9 @@ module.exports = async function orderRoutes(req, res) {
             }
             order.updatedAt = new Date().toISOString();
             writeJSON(dataPath, orders);
-            return sendResponse(res, 200, order);
+            return sendResponse(res, STATUS.OK, order);
         } catch (err) {
-            return sendResponse(res, 400, {message: err.message || 'Invalid JSON'});
+            return sendResponse(res, STATUS.BAD_REQUEST, {message: err.message || 'Invalid JSON'});
         }
     }
 
@@ -144,14 +143,14 @@ module.exports = async function orderRoutes(req, res) {
         const index = orders.findIndex(o => o.id === id);
 
         if (index === -1) {
-            return sendResponse(res, 404, { message: 'Order not found' });
+            return sendResponse(res, STATUS.NOT_FOUND, { message: 'Order not found' });
         }
 
         orders.splice(index, 1);
         writeJSON(dataPath, orders);
 
-        return sendResponse(res, 204);
+        return sendResponse(res, STATUS.NO_CONTENT);
     }
 
-    return sendResponse(res, 405, { message: 'Method Not Allowed' });
+    return sendResponse(res, STATUS.METHOD_NOT_ALLOWED, { message: 'Method Not Allowed' });
 }
