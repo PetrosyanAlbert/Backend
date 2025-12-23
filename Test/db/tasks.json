@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "title": "Go to gym",
+    "description": "Workout for at least 1 hour",
+    "completed": false,
+    "createdAt": "2025-01-01T09:00:00.000Z"
+  },
+  {
+    "id": 1766498270942,
+    "title": "Learn Express",
+    "description": "Build REST API",
+    "completed": false,
+    "createdAt": "2025-12-23T13:57:50.942Z"
+  }
+]
