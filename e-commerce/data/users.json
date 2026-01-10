@@ -1,0 +1,30 @@
+[
+  {
+    "id": "uuid-1",
+    "email": "a@mail.com",
+    "passwordHash": "$2a$10$...",
+    "role": "customer",
+    "createdAt": "2025-01-01"
+  },
+  {
+    "id": "581045a6-460d-405e-9b0e-9d54253a57fa",
+    "email": "test@mail.com",
+    "passwordHash": "$2b$10$BQPOhILn633MIGZuRktzVer3qB9MRKLhvlIPLjgz/65wf058YdDTW",
+    "role": "admin",
+    "createdAt": "2026-01-07T10:10:16.407Z"
+  },
+  {
+    "id": "42319a3b-412a-40ca-9d86-e074246cfd15",
+    "email": "Aaaa@mail.ru",
+    "passwordHash": "$2b$10$WhNMLBzvctDtxnDkQXdTQ.QIaCYn.Q8CVg6cayGo/0ObVcEf7UIwa",
+    "role": "admin",
+    "createdAt": "2026-01-07T11:28:53.444Z"
+  },
+  {
+    "id": "63e02307-16b8-43e5-aab6-69066340e7f0",
+    "email": "Abo1234@mail.ru",
+    "passwordHash": "$2b$10$EdKoZ6F1FFnPN3hL.WzkyOA.FNfW.KY5KiaiuJ1yPzOUtGC.Y9uHa",
+    "role": "admin",
+    "createdAt": "2026-01-10T12:59:46.264Z"
+  }
+]

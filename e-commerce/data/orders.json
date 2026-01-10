@@ -1,0 +1,21 @@
+[
+  {
+    "id": "7a60665d-808d-483a-b30e-acdb2470c631",
+    "userId": "63e02307-16b8-43e5-aab6-69066340e7f0",
+    "items": [
+      {
+        "productId": "a1f2c0e1-1a2b-4c3d-9e10-111213141516",
+        "quantity": 2,
+        "priceAtPurchase": 2500
+      },
+      {
+        "productId": "b2e3d4c5-2b3c-4d5e-8f90-212223242526",
+        "quantity": 1,
+        "priceAtPurchase": 1200
+      }
+    ],
+    "totalAmount": 6200,
+    "status": "created",
+    "createdAt": "2026-01-10T13:01:33.826Z"
+  }
+]
