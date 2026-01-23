@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+
+    <%- include("../partials/nav") %>
+
+    <h2>Users</h2>
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Created At</th>
+        </tr>
+
+        <% users.forEach((user, i) => { %>
+            <tr>
+                <td><%= i + 1 %></td>
+                <td><%= user.name %></td>
+                <td><%= user.email %></td>
+                <td><strong><%= user.role %></strong></td>
+                <td><%= new Date(user.createdAt).toLocaleString() %></td>
+            </tr>
+        <% }) %>
+    </table>
+
+</body>
+</html>

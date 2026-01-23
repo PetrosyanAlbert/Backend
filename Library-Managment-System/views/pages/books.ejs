@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Books</title>
+</head>
+<body>
+<%- include("../partials/nav") %>
+
+    <h2>Books</h2>
+
+    <% if (books.length === 0) { %>
+        <p>No books available</p>
+    <% } %>
+
+    <ul>
+        <% books.forEach(book => { %>
+            <li>
+                <strong><%= book.title %></strong>
+                by <%= book.author %>
+                (<%= book.year %>)
+
+                <% if (book.available) { %>
+                    — Available
+                <% } else { %>
+                    — Borrowed
+                <% } %>
+
+                <% if (currentUser && currentUser.role === 'admin') { %>
+                    | <a href="/admin/books/<%= book.id %>/edit">Edit</a>
+
+                    <form
+                        action="/admin/books/<%= book.id %>/delete"
+                        method="POST"
+                        style="display:inline"
+                    >
+                        <button type="submit">Delete</button>
+                    </form>
+                <% } %>
+            </li>
+        <% }) %>
+    </ul>
+
+    <% if (currentUser && currentUser.role === 'admin') { %>
+        <a href="/admin/books/new">Add book</a>
+    <% } %>
+</body>
+</html>

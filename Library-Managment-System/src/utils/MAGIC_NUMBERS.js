@@ -1,0 +1,5 @@
+const MAGIC_NUMBERS = {
+    MINIMUM_PASSWORD_LENGTH: 6,
+};
+
+module.exports = MAGIC_NUMBERS;

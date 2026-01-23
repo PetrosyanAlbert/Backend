@@ -1,0 +1,18 @@
+[
+  {
+    "id": "u_mkjssupyvhej",
+    "name": "Albert",
+    "email": "albert-petrosyan-97@mail.ru",
+    "passwordHash": "$2b$10$FP30cDmiKkDXn67BCh8H4udHwkJNwaeo9myZECcBRQ2oGAO7X2A2q",
+    "role": "member",
+    "createdAt": "2026-01-18T13:54:49.606Z"
+  },
+  {
+    "id": "u_mkjszfp0jdmg",
+    "name": "Albert",
+    "email": "Aa@mail.ru",
+    "passwordHash": "$2b$10$rdTwJwTQmpY2Z85wfwQdoOTHTUvS9PckTqluxCZioMmBe9XifHuzy",
+    "role": "admin",
+    "createdAt": "2026-01-18T13:59:56.724Z"
+  }
+]

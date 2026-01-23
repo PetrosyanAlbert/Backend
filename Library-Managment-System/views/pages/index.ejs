@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Library Management System</title>
+</head>
+<body>
+
+    <%- include("../partials/nav") %>
+
+    <main style="padding: 40px; max-width: 800px; margin: auto; text-align: center;">
+
+        <h1>Library Management System</h1>
+
+        <p style="font-size: 18px; margin-top: 20px;">
+            Welcome to the Library Management System.
+            This platform allows users to browse books, borrow and return them,
+            and allows librarians to manage the catalog and users.
+        </p>
+
+        <% if (!currentUser) { %>
+            <div style="margin-top: 40px;">
+                <a href="/login">
+                    <button style="padding: 10px 20px; margin-right: 10px;">
+                        Login
+                    </button>
+                </a>
+
+                <a href="/register">
+                    <button style="padding: 10px 20px;">
+                        Register
+                    </button>
+                </a>
+            </div>
+        <% } else { %>
+            <div style="margin-top: 40px;">
+                <a href="/books">
+                    <button style="padding: 12px 24px;">
+                        Go to Library
+                    </button>
+                </a>
+            </div>
+        <% } %>
+
+    </main>
+
+</body>
+</html>

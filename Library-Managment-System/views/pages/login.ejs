@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+</head>
+<body>
+<%- include("../partials/nav") %>
+
+    <h2>Login</h2>
+
+    <% if (error) { %>
+        <p style="color: red;"><%= error %></p>
+    <% } %>
+
+    <form action="/login" method="POST">
+        <div>
+            <label>Email</label>
+            <input type="email" name="email" required />
+        </div>
+
+        <div>
+            <label>Password</label>
+            <input type="password" name="password" required />
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p>
+        Don’t have an account?
+        <a href="/register">Register</a>
+    </p>
+</body>
+</html>

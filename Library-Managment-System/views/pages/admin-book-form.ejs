@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+<%- include("../partials/nav") %>
+
+        <h2><%= book ? "Edit book" : "Add book" %></h2>
+
+        <form
+            action="<%= book ? `/admin/books/${book.id}` : '/admin/books' %>"
+            method="POST"
+        >
+            <input name="title" value="<%= book ? book.title : '' %>" />
+            <input name="author" value="<%= book ? book.author : '' %>" />
+            <input name="year" value="<%= book ? book.year : '' %>" />
+
+            <button type="submit"><%= book ? "Update" : "Create" %></button>
+        </form>
+    </body>
+</html>

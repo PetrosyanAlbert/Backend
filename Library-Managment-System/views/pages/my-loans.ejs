@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Loans</title>
+</head>
+<body>
+<%- include("../partials/nav") %>
+
+    <h2>My borrowed books</h2>
+
+    <% if (loans.length === 0) { %>
+        <p>You have no borrowed books.</p>
+    <% } %>
+
+    <ul>
+        <% loans.forEach(item => { %>
+            <li>
+                <a href="/books/<%= item.book.id %>">
+                    <strong><%= item.book.title %></strong>
+                    <strong><%= item.book.author %></strong>
+                </a>
+                by <%= item.book.author%>
+                (<%= item.book.year %>)
+                <br />
+                Borrowed at: <%= new Date(item.loan.borrowedAt).toLocaleString() %>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>

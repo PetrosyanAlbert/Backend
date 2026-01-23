@@ -1,0 +1,23 @@
+[
+  {
+    "id": "l_mkkv6yh1dgsz",
+    "userId": "u_mkjszfp0jdmg",
+    "bookId": "b1",
+    "borrowedAt": "2026-01-19T07:49:33.061Z",
+    "returnedAt": "2026-01-19T08:17:28.473Z"
+  },
+  {
+    "id": "l_mkkv7yms7qyw",
+    "userId": "u_mkjszfp0jdmg",
+    "bookId": "b1",
+    "borrowedAt": "2026-01-19T07:50:19.924Z",
+    "returnedAt": "2026-01-19T08:17:41.919Z"
+  },
+  {
+    "id": "l_mkkxdmbx3j2i",
+    "userId": "u_mkjszfp0jdmg",
+    "bookId": "b1",
+    "borrowedAt": "2026-01-19T08:50:43.149Z",
+    "returnedAt": null
+  }
+]

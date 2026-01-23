@@ -1,0 +1,42 @@
+[
+  {
+    "id": "b1",
+    "title": "Clean Code",
+    "author": "Robert C. Martin",
+    "year": 2008,
+    "available": false,
+    "createdAt": "2026-01-14T10:00:00.000Z"
+  },
+  {
+    "id": "b_mkl2wx1317u3",
+    "title": "The Pragmatic Programmer",
+    "author": "Andrew Hunt, David Thomas",
+    "year": 1999,
+    "available": true,
+    "createdAt": "2026-01-19T11:25:41.559Z"
+  },
+  {
+    "id": "b_mkl2xlx0619t",
+    "title": "Design Patterns",
+    "author": "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides",
+    "year": 1994,
+    "available": true,
+    "createdAt": "2026-01-19T11:26:13.812Z"
+  },
+  {
+    "id": "b_mkl2ydu0zm08",
+    "title": "You Don't Know JS",
+    "author": "Kyle Simpson",
+    "year": 2015,
+    "available": true,
+    "createdAt": "2026-01-19T11:26:49.992Z"
+  },
+  {
+    "id": "b_mkl2z1emnxvm",
+    "title": "Refactoring",
+    "author": "Martin Fowler",
+    "year": 1998,
+    "available": true,
+    "createdAt": "2026-01-19T11:27:20.542Z"
+  }
+]
