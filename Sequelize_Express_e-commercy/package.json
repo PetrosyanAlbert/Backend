@@ -1,0 +1,33 @@
+{
+    "name": "sequelize_express_e-commercy",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "db:reset": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate",
+        "db:create": "sequelize-cli db:create",
+        "db:drop": "sequelize-cli db:drop",
+        "db:migrate": "sequelize-cli db:migrate",
+        "db:rollback": "sequelize-cli db:migrate:undo",
+        "seq-configs": "npx sequelize-cli init",
+        "dev": "nodemon server.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "dependencies": {
+        "bcrypt": "^6.0.0",
+        "dotenv": "^17.2.3",
+        "express": "^5.2.1",
+        "pg": "^8.18.0",
+        "sequelize": "^6.37.7",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^5.0.1"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.11",
+        "sequelize-cli": "^6.6.5"
+    }
+}
