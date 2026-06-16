@@ -1,7 +1,7 @@
-require('dotenv').config();
-const net = require('node:net');
-const helpers = require('./utils/helpers');
-const logger = require('./utils/logger');
+require("dotenv").config();
+const net = require("node:net");
+const helpers = require("./utils/helpers");
+const logger = require("./utils/logger");
 const PORT = process.env.PORT;
 const MAX_CLIENTS = process.env.MAX_CLIENTS;
 
@@ -17,12 +17,14 @@ const broadcast = (senderId, message) => {
             }
         }
     }
-}
+};
 
 const handlePrivateMessage = (socket, message) => {
     const spaceIndex = message.indexOf(" ");
     if (spaceIndex === -1) {
-        socket.write("-> Invalid private message format. Use: @User_XXXX message\n");
+        socket.write(
+            "-> Invalid private message format. Use: @User_XXXX message\n"
+        );
         return;
     }
     const targetId = message.substring(1, spaceIndex);
@@ -34,7 +36,7 @@ const handlePrivateMessage = (socket, message) => {
     }
     logger.log(`${socket.id} -> ${targetId}: ${text}`);
     targetSocket.write(`-> \x1b[35m[Private] ${socket.id}: ${text}\x1b[0m\n`);
-}
+};
 
 const handleCommand = (socket, message) => {
     const parts = message.split(" ");
@@ -48,15 +50,15 @@ const handleCommand = (socket, message) => {
         case "/rename":
             handleRename(socket, args[0]);
             break;
-        default: 
-        socket.write("-> Unknow command\n");
+        default:
+            socket.write("-> Unknow command\n");
     }
-}
+};
 
 function handleList(socket) {
     let list = "Online users:\n";
     for (let id of clients.keys()) {
-        list += ` - \x1b[31m${id}\x1b[0m\n`;  
+        list += ` - \x1b[31m${id}\x1b[0m\n`;
     }
     socket.write(list);
 }
@@ -84,9 +86,14 @@ const handleRename = (socket, newName) => {
     socket.id = newName;
     clients.set(newName, socket);
     logger.log(`${oldName} renamed to ${newName}`);
-    socket.write(`-> Your name changed from \x1b[31m${oldName}\x1b[0m to \x1b[32m${newName}\x1b[0m\n`);
-    broadcast(newName, `\x1b[36m${oldName} renamed to \x1b[32m${newName}\x1b[0m`);
-}
+    socket.write(
+        `-> Your name changed from \x1b[31m${oldName}\x1b[0m to \x1b[32m${newName}\x1b[0m\n`
+    );
+    broadcast(
+        newName,
+        `\x1b[36m${oldName} renamed to \x1b[32m${newName}\x1b[0m`
+    );
+};
 
 //body
 const clients = new Map();
@@ -131,8 +138,11 @@ const server = net.createServer((socket) => {
     socket.on("error", () => {
         logger.log(`${socket.id} disconnected unexpectedly`);
         clients.delete(socket.id);
-        broadcast(socket.id, `\x1b[31m${socket.id} disconnected unexpectedly.\x1b[0m`);
-    })
+        broadcast(
+            socket.id,
+            `\x1b[31m${socket.id} disconnected unexpectedly.\x1b[0m`
+        );
+    });
 });
 
 server.listen(PORT, () => {
